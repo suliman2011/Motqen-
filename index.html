@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة مُتْقِن</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; }
+        .hidden-section { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-green-700 text-white text-center py-4 shadow-md">
+        <h1 class="text-3xl font-bold">منصة مُتْقِن للحلقات القرآنية</h1>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 max-w-4xl">
+
+        <!-- Home Selection View -->
+        <div id="view-home" class="text-center mt-10 space-y-4">
+            <h2 class="text-xl font-bold text-gray-700 mb-6">اختر واجهة الدخول:</h2>
+            <button onclick="showView('view-teacher')" class="block w-full max-w-md mx-auto bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg shadow">
+                👨‍🏫 دخول المعلم
+            </button>
+            <button onclick="showView('view-manager-login')" class="block w-full max-w-md mx-auto bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg shadow mt-4">
+                🔑 إعدادات مدير الحلقات
+            </button>
+        </div>
+
+        <!-- Manager Login View -->
+        <div id="view-manager-login" class="hidden-section max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">رمز دخول المدير</h2>
+            <input type="password" id="managerCode" class="w-full border-2 border-gray-300 rounded p-2 text-center mb-4 text-xl" placeholder="أدخل الرمز السري">
+            <button onclick="loginManager()" class="w-full bg-gray-800 text-white font-bold py-2 px-4 rounded hover:bg-gray-700">دخول</button>
+            <button onclick="showView('view-home')" class="w-full text-gray-500 mt-4 underline text-sm">عودة للرئيسية</button>
+        </div>
+
+        <!-- Manager Dashboard View -->
+        <div id="view-manager-dashboard" class="hidden-section mt-6">
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6 border-t-4 border-gray-800">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">لوحة تحكم المدير</h2>
+                
+                <div class="bg-gray-50 p-4 rounded border mb-4">
+                    <h3 class="font-bold text-lg text-green-700 mb-3">➕ إضافة سؤال لاختبارات سابقة</h3>
+                    <input type="text" id="examGrade" placeholder="المرحلة/المستوى (مثال: المستوى الأول)" class="w-full border rounded p-2 mb-2">
+                    <textarea id="examQuestion" placeholder="اكتب نص السؤال هنا..." class="w-full border rounded p-2 mb-2 h-24"></textarea>
+                    <button onclick="addExamQuestion()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full font-bold">إضافة السؤال وإرساله للمعلمين</button>
+                </div>
+
+                <button onclick="showView('view-home')" class="w-full bg-red-500 text-white py-2 rounded mt-4">تسجيل الخروج</button>
+            </div>
+        </div>
+
+        <!-- Teacher Dashboard View -->
+        <div id="view-teacher" class="hidden-section mt-6">
+            
+            <!-- Teacher Navigation -->
+            <div class="flex flex-wrap md:flex-nowrap gap-2 mb-6">
+                <button onclick="switchTeacherTab('tab-daily')" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-1 rounded font-bold shadow text-sm md:text-base w-full">التسميع اليومي</button>
+                <button onclick="switchTeacherTab('tab-monthly')" class="flex-1 bg-green-700 hover:bg-green-800 text-white py-2 px-1 rounded font-bold shadow text-sm md:text-base w-full">السجل الشهري</button>
+                <button onclick="switchTeacherTab('tab-exams')" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-2 px-1 rounded font-bold shadow text-sm md:text-base w-full">الاختبارات السابقة</button>
+            </div>
+
+            <!-- Daily Log Tab -->
+            <div id="tab-daily" class="bg-white p-6 rounded-lg shadow border-t-4 border-green-600 teacher-tab">
+                <h2 class="text-xl font-bold text-green-800 mb-4">رصد التسميع اليومي</h2>
+                <input type="text" id="studentName" placeholder="اسم الطالب" class="w-full border border-gray-300 rounded p-2 mb-3 outline-none focus:border-green-500">
+                <input type="text" id="portion" placeholder="مقدار الحفظ والتكرار (مثال: سورة البقرة 1-5)" class="w-full border border-gray-300 rounded p-2 mb-3 outline-none focus:border-green-500">
+                <select id="rating" class="w-full border border-gray-300 rounded p-2 mb-3 outline-none focus:border-green-500">
+                    <option value="ممتاز">ممتاز 🌟</option>
+                    <option value="جيد جداً">جيد جداً ⭐</option>
+                    <option value="جيد">جيد 👍</option>
+                    <option value="يحتاج مراجعة">يحتاج مراجعة ⚠️</option>
+                </select>
+                <button onclick="addRecitation()" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-500 font-bold text-lg mt-2 shadow">حفظ التسميع</button>
+            </div>
+
+            <!-- Monthly Log Tab -->
+            <div id="tab-monthly" class="hidden-section bg-white p-6 rounded-lg shadow border-t-4 border-green-700 teacher-tab overflow-hidden">
+                <h2 class="text-xl font-bold text-green-800 mb-4">السجل الشهري وملاحظات المعلم</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse min-w-[500px]">
+                        <thead>
+                            <tr class="bg-green-700 text-white">
+                                <th class="border p-2">اسم الطالب</th>
+                                <th class="border p-2">الحفظ</th>
+                                <th class="border p-2">التقييم</th>
+                                <th class="border p-2 w-2/5">ملاحظات المعلم 📝</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthlyLogBody">
+                            <!-- Data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Exams Tab -->
+            <div id="tab-exams" class="hidden-section bg-white p-6 rounded-lg shadow border-t-4 border-teal-600 teacher-tab">
+                <h2 class="text-xl font-bold text-teal-800 mb-4">بنك أسئلة الاختبارات (مضافة من الإدارة)</h2>
+                <div id="teacherExamsList" class="space-y-3">
+                    <!-- Exams will be populated here -->
+                </div>
+            </div>
+
+            <button onclick="showView('view-home')" class="w-full text-center mt-6 text-gray-500 underline text-sm">عودة للرئيسية</button>
+        </div>
+    </div>
+
+    <script>
+        // Navigation Logic
+        function showView(viewId) {
+            document.getElementById('view-home').style.display = 'none';
+            document.getElementById('view-manager-login').style.display = 'none';
+            document.getElementById('view-manager-dashboard').style.display = 'none';
+            document.getElementById('view-teacher').style.display = 'none';
+            
+            document.getElementById(viewId).style.display = 'block';
+
+            if(viewId === 'view-teacher') {
+                switchTeacherTab('tab-daily');
+            }
+        }
+
+        function switchTeacherTab(tabId) {
+            const tabs = document.querySelectorAll('.teacher-tab');
+            tabs.forEach(tab => tab.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+
+            if (tabId === 'tab-monthly') renderMonthlyLog();
+            if (tabId === 'tab-exams') renderTeacherExams();
+        }
+
+        // Manager Login
+        function loginManager() {
+            const code = document.getElementById('managerCode').value;
+            if (code === '571') {
+                document.getElementById('managerCode').value = '';
+                showView('view-manager-dashboard');
+            } else {
+                alert('الرمز السري غير صحيح!');
+            }
+        }
+
+        // --- Feature 1: Manager Exams ---
+        function addExamQuestion() {
+            const gradeText = document.getElementById('examGrade').value;
+            const questionText = document.getElementById('examQuestion').value;
+            
+            if (!questionText || !gradeText) {
+                alert("يرجى كتابة المرحلة ونص السؤال.");
+                return;
+            }
+
+            let exams = JSON.parse(localStorage.getItem('motqen_exams')) || [];
+            exams.push({ id: Date.now(), grade: gradeText, text: questionText });
+            localStorage.setItem('motqen_exams', JSON.stringify(exams));
+            
+            document.getElementById('examGrade').value = '';
+            document.getElementById('examQuestion').value = '';
+            alert("تمت إضافة السؤال بنجاح وسيظهر للمعلمين فوراً!");
+        }
+
+        function renderTeacherExams() {
+            const container = document.getElementById('teacherExamsList');
+            let exams = JSON.parse(localStorage.getItem('motqen_exams')) || [];
+            
+            if (exams.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">لا توجد أسئلة مضافة من قبل الإدارة حتى الآن.</p>';
+                return;
+            }
+
+            container.innerHTML = exams.map(exam => `
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm border-r-4 border-teal-500">
+                    <span class="inline-block bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded font-bold mb-2">${exam.grade}</span>
+                    <p class="text-gray-800 font-medium">${exam.text}</p>
+                </div>
+            `).join('');
+        }
+
+        // --- Feature 2: Monthly Log with Teacher Notes ---
+        function addRecitation() {
+            const studentName = document.getElementById('studentName').value;
+            const portion = document.getElementById('portion').value;
+            const rating = document.getElementById('rating').value;
+
+            if(!studentName || !portion) {
+                alert('الرجاء إدخال اسم الطالب ومقدار الحفظ');
+                return;
+            }
+
+            let records = JSON.parse(localStorage.getItem('motqen_monthly_log')) || [];
+            records.push({ 
+                id: Date.now(), 
+                studentName, 
+                portion, 
+                rating, 
+                teacherNotes: '' // الخانة الجديدة
+            });
+            localStorage.setItem('motqen_monthly_log', JSON.stringify(records));
+
+            document.getElementById('studentName').value = '';
+            document.getElementById('portion').value = '';
+            alert('تم حفظ التسميع بنجاح وإضافته للسجل الشهري!');
+        }
+
+        function renderMonthlyLog() {
+            const tbody = document.getElementById('monthlyLogBody');
+            let records = JSON.parse(localStorage.getItem('motqen_monthly_log')) || [];
+
+            if (records.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-gray-500">لا توجد سجلات تسميع حتى الآن</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = records.map((record, index) => `
+                <tr class="text-center bg-gray-50 hover:bg-white transition-colors">
+                    <td class="border p-2 font-bold text-sm sm:text-base">${record.studentName}</td>
+                    <td class="border p-2 text-sm sm:text-base">${record.portion}</td>
+                    <td class="border p-2 text-sm sm:text-base">${record.rating}</td>
+                    <td class="border p-1">
+                        <input type="text" 
+                            class="w-full border border-gray-200 rounded p-2 text-sm focus:border-green-500 outline-none" 
+                            placeholder="اكتب ملاحظتك واضغط خارج المربع للحفظ..." 
+                            value="${record.teacherNotes || ''}" 
+                            onchange="updateTeacherNote(${index}, this.value)">
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateTeacherNote(index, value) {
+            let records = JSON.parse(localStorage.getItem('motqen_monthly_log')) || [];
+            if (records[index]) {
+                records[index].teacherNotes = value;
+                localStorage.setItem('motqen_monthly_log', JSON.stringify(records));
+            }
+        }
+
+        // إعداد الواجهة الافتراضية عند فتح التطبيق
+        showView('view-home');
+    </script>
+</body>
+</html>
